@@ -17,7 +17,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
       - name: Verify
         run: bash ./gradlew --no-daemon test bootJar
       - uses: docker/setup-buildx-action@v3
