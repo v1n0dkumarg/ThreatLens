@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dev.portfolio.threatlens.SecurityIntegrationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-31T17:14:34.898Z" hostname="OTX-F21GDY3" time="6.313">
+  <properties/>
+  <testcase name="viewerCanReadButCannotCreateIndicators()" classname="dev.portfolio.threatlens.SecurityIntegrationTest" time="0.397"/>
+  <system-out><![CDATA[22:44:35.018 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [dev.portfolio.threatlens.SecurityIntegrationTest]: SecurityIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+22:44:35.218 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration dev.portfolio.threatlens.ThreatLensApplication for test class dev.portfolio.threatlens.SecurityIntegrationTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2026-10-31T22:44:35.784+05:30  INFO 35152 --- [threatlens] [    Test worker] d.p.threatlens.SecurityIntegrationTest   : Starting SecurityIntegrationTest using Java 21.0.13.0.3 with PID 35152 (started by vinodkumarg in C:\Users\vinodkumarg\Documents\personal\Projects-spring\ThreatLens)
+2026-10-31T22:44:35.786+05:30  INFO 35152 --- [threatlens] [    Test worker] d.p.threatlens.SecurityIntegrationTest   : No active profile set, falling back to 1 default profile: "default"
+2026-10-31T22:44:39.259+05:30  INFO 35152 --- [threatlens] [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userDetailsService
+2026-10-31T22:44:39.578+05:30  INFO 35152 --- [threatlens] [    Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-31T22:44:40.761+05:30  INFO 35152 --- [threatlens] [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-31T22:44:40.761+05:30  INFO 35152 --- [threatlens] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-31T22:44:40.763+05:30  INFO 35152 --- [threatlens] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-31T22:44:40.800+05:30  INFO 35152 --- [threatlens] [    Test worker] d.p.threatlens.SecurityIntegrationTest   : Started SecurityIntegrationTest in 5.501 seconds (process running for 7.994)
+]]></system-out>
+  <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\vinodkumarg\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.17.7\fbf3d6d649ed37fc9e9c59480a05be0a26e3c2da\byte-buddy-agent-1.17.7.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>

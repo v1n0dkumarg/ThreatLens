@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#18211f">
+  <title>ThreatLens | Intelligence workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/auth.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home"><span class="brand-glyph">T<span>.</span></span><span>THREAT<span class="brand-light">LENS</span></span></a>
+    <div class="workspace-name"><span class="workspace-dot"></span> INTELLIGENCE WORKSPACE <span class="divider">/</span> COLLECTIONS</div>
+    <div class="header-right"><span class="demo-chip">DEMO FEED</span><button id="sign-out" class="analyst sign-out" type="button" aria-label="Sign out" title="Sign out">SIGN OUT <b>AK</b></button></div>
+  </header>
+  <main>
+    <section class="heading-row"><div><p class="eyebrow">THREAT INTELLIGENCE <span>·</span> INDICATORS</p><h1>Indicator observatory</h1><p class="lede">Curate observables, trace sightings, and preserve the evidence behind every match.</p></div><div class="confidence-note"><span class="confidence-icon">✳</span><span>Confidence is source-attributed<br>and expires with the indicator.</span></div></section>
+    <section class="stat-grid" aria-label="Intelligence metrics">
+      <article class="stat"><span>ACTIVE INDICATORS</span><strong id="metric-indicators">—</strong><small>across all types</small></article>
+      <article class="stat"><span>OBSERVED MATCHES</span><strong id="metric-matches">—</strong><small>synthetic telemetry</small></article>
+      <article class="stat"><span>HIGH CONFIDENCE</span><strong id="metric-confidence">—</strong><small>confidence ≥ 80</small></article>
+      <article class="stat source-stat"><span>FEED HEALTH</span><strong><i></i>Local demo</strong><small>no external feed polling</small></article>
+    </section>
+    <section class="main-grid">
+      <article class="panel indicator-panel" id="indicators">
+        <div class="panel-heading"><div><p class="eyebrow">COLLECTION</p><h2>Indicators</h2></div><div class="table-tools"><label class="search"><span>⌕</span><input id="indicator-search" type="search" placeholder="Search indicators" aria-label="Search indicators"></label><select id="type-filter" aria-label="Filter by indicator type"><option value="">All types</option><option>IP</option><option>DOMAIN</option><option>URL</option><option>SHA256</option><option>EMAIL</option></select></div></div>
+        <div class="table-scroll"><table><thead><tr><th>OBSERVABLE</th><th>TYPE</th><th>CONFIDENCE</th><th>ATT&CK</th><th>EXPIRES</th></tr></thead><tbody id="indicator-rows"><tr><td colspan="5" class="loading">Loading indicators…</td></tr></tbody></table></div>
+        <div class="panel-footer"><span id="indicator-total">0 indicators</span><span>Normalized &amp; deduplicated</span></div>
+      </article>
+      <article class="panel add-panel">
+        <div class="panel-heading"><div><p class="eyebrow">ANALYST INTAKE</p><h2>Add indicator</h2></div><span class="add-mark">＋</span></div>
+        <form id="indicator-form" class="indicator-form">
+          <label>Observable type<select name="type" required><option value="IP">IP address</option><option value="DOMAIN">Domain</option><option value="URL">URL</option><option value="SHA256">SHA-256</option><option value="EMAIL">Email</option></select></label>
+          <label>Value<input name="value" maxlength="512" required placeholder="e.g. 203.0.113.12" autocomplete="off"></label>
+          <div class="form-row"><label>Source<input name="source" maxlength="120" required value="Analyst submission"></label><label>Confidence <span id="confidence-value">60</span><input name="confidence" type="range" min="0" max="100" value="60"></label></div>
+          <div class="form-row"><label>ATT&amp;CK technique<input name="techniqueId" maxlength="12" placeholder="T1071"></label><label>Technique name<input name="techniqueName" maxlength="160" placeholder="Optional"></label></div>
+          <label>Tags <span class="optional">OPTIONAL</span><input name="tags" maxlength="160" placeholder="network, review (comma separated)"></label>
+          <button class="submit-button" type="submit">Add to collection <span>→</span></button>
+          <p class="form-footnote">Validates and stores locally. No outbound lookups.</p>
+        </form>
+      </article>
+    </section>
+    <section class="panel sightings" id="matches">
+      <div class="panel-heading"><div><p class="eyebrow">OBSERVED ACTIVITY</p><h2>Indicator sightings</h2></div><span class="match-legend"><i></i> MATCH CONFIRMED</span></div>
+      <div id="match-list" class="match-list"><div class="loading">Loading synthetic sightings…</div></div>
+    </section>
+    <footer><span>ThreatLens <span class="footer-dot">·</span> Local demo</span><span>Reserved example observables · no live threat feeds</span></footer>
+  </main>
+  <div id="auth-overlay" class="auth-overlay" hidden>
+    <section class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+      <p class="eyebrow">THREATLENS ACCESS</p><h2 id="auth-title">Sign in</h2>
+      <p class="auth-copy">Use an analyst or administrator account to manage the intelligence workspace.</p>
+      <form id="auth-form"><label>Username<input name="username" autocomplete="username" required></label><label>Password<input name="password" type="password" autocomplete="current-password" required></label><button type="submit">Continue</button><p id="auth-error" aria-live="polite"></p></form>
+    </section>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+name: threatlens
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: threatlens
+      POSTGRES_USER: ${POSTGRES_USER:-threatlens_bootstrap}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-threatlens-bootstrap-change-me}
+      THREATLENS_DB_PASSWORD: ${THREATLENS_DB_PASSWORD:-local-threatlens-change-me}
+    ports:
+      - "127.0.0.1:5435:5432"
+    volumes:
+      - threatlens-postgres-data:/var/lib/postgresql/data
+      - ./infra/postgres-init.sql:/docker-entrypoint-initdb.d/10-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d threatlens"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.4-alpine
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-local-only-change-me}
+    command: ["sh", "-c", "exec redis-server --appendonly yes --requirepass \"$${REDIS_PASSWORD}\" --maxmemory 256mb --maxmemory-policy allkeys-lru"]
+    ports:
+      - "127.0.0.1:6383:6379"
+    volumes:
+      - threatlens-redis-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli --no-auth-warning -a \"$${REDIS_PASSWORD}\" ping | grep -q PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  threatlens:
+    build:
+      context: .
+    environment:
+      PORT: 8083
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/threatlens
+      SPRING_DATASOURCE_USERNAME: threatlens_app
+      SPRING_DATASOURCE_PASSWORD: ${THREATLENS_DB_PASSWORD:-local-threatlens-change-me}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-local-only-change-me}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-local-admin-change-me}
+      ANALYST_USERNAME: ${ANALYST_USERNAME:-analyst}
+      ANALYST_PASSWORD: ${ANALYST_PASSWORD:-local-analyst-change-me}
+      VIEWER_USERNAME: ${VIEWER_USERNAME:-viewer}
+      VIEWER_PASSWORD: ${VIEWER_PASSWORD:-local-viewer-change-me}
+    ports:
+      - "127.0.0.1:8083:8083"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8083/actuator/health | grep -q 'UP'"]
+      interval: 20s
+      timeout: 3s
+      retries: 5
+      start_period: 45s
+    restart: unless-stopped
+
+volumes:
+  threatlens-postgres-data:
+  threatlens-redis-data:
