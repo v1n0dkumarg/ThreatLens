@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,13 @@ class SecurityIntegrationTest {
 
     @MockitoBean
     private IndicatorService service;
+
+    @Test
+    void unauthenticatedApiRequestDoesNotTriggerBrowserBasicAuthPrompt() throws Exception {
+        mockMvc.perform(get("/api/v1/indicators"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(header().doesNotExist("WWW-Authenticate"));
+    }
 
     @Test
     void viewerCanReadButCannotCreateIndicators() throws Exception {

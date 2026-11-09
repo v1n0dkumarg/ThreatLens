@@ -2,6 +2,7 @@ package dev.portfolio.threatlens;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -116,7 +117,8 @@ public class IndicatorService {
         jdbc.update("INSERT INTO threat_indicators (id, type, value, source, confidence, status, technique_id, "
                         + "technique_name, first_seen, expires_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 indicator.id(), indicator.type(), indicator.value(), indicator.source(), indicator.confidence(),
-                indicator.status(), indicator.techniqueId(), indicator.techniqueName(), indicator.firstSeen(), indicator.expiresAt());
+                indicator.status(), indicator.techniqueId(), indicator.techniqueName(), Timestamp.from(indicator.firstSeen()),
+                Timestamp.from(indicator.expiresAt()));
         for (int index = 0; index < indicator.tags().size(); index++) {
             jdbc.update("INSERT INTO indicator_tags (indicator_id, tag, position) VALUES (?, ?, ?)",
                     indicator.id(), indicator.tags().get(index), index);
@@ -127,7 +129,7 @@ public class IndicatorService {
     private void addMatch(ThreatIndicator indicator, String asset, String context, Instant observedAt) {
         jdbc.update("INSERT INTO threat_matches (id, indicator_id, observable, asset, context, observed_at) "
                         + "VALUES (?, ?, ?, ?, ?, ?)",
-                UUID.randomUUID(), indicator.id(), indicator.value(), asset, context, observedAt);
+            UUID.randomUUID(), indicator.id(), indicator.value(), asset, context, Timestamp.from(observedAt));
     }
 
     private static String normalizeUrl(String value) {

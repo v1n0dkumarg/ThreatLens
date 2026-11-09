@@ -3,6 +3,7 @@ package dev.portfolio.threatlens;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
 public class SecurityConfiguration {
@@ -41,12 +43,13 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .headers(headers -> headers.frameOptions(frame -> frame.deny()))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/index.html", "/app.js", "/styles.css", "/error", "/actuator/health/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/app.js", "/styles.css", "/auth.css", "/error", "/actuator/health/**").permitAll()
                         .requestMatchers("/actuator/prometheus").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/**").hasAnyRole("VIEWER", "ANALYST", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/**").hasAnyRole("ANALYST", "ADMIN")
                         .anyRequest().denyAll())
-                .httpBasic(basic -> basic.realmName("ThreatLens"))
+                .httpBasic(basic -> basic.realmName("ThreatLens")
+                    .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .build();
     }
 }
